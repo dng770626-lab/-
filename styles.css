@@ -39,3 +39,10 @@
 .garden-page .detail-hero h1{white-space:nowrap;font-size:clamp(28px,6vw,78px)}
 
 .culture-page .detail-hero h1{white-space:nowrap;font-size:clamp(24px,5.5vw,78px)}
+
+/* 버스와 나무 주변의 판촉물 구역 */
+.promotional{left:48%;top:47%;width:10%;height:19%}
+.promotional span{margin-bottom:8px}
+.amber{border-top:5px solid #e6a82c}
+.promotional-page{--accent:#b97a13;--accent-soft:#fff5dc}
+@media(min-width:1100px){.service-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.service-card{padding:24px}.service-card h3{font-size:20px}}
