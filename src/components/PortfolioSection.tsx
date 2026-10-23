@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import type { Portfolio } from '@/types/portfolio';
+import { portfolioCategories, type Portfolio } from '@/types/portfolio';
 
 function formatWorkDate(value: string) {
   return new Intl.DateTimeFormat('ko-KR', {
@@ -13,7 +13,7 @@ export async function PortfolioSection() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('portfolios')
-    .select('id,title,description,work_date,location,image_path,created_by,created_at')
+    .select('id,category,title,description,work_date,location,image_path,created_by,created_at')
     .order('created_at', { ascending: false });
 
   const portfolios = (data ?? []) as Portfolio[];
@@ -35,6 +35,7 @@ export async function PortfolioSection() {
       ) : (
         <div className="portfolio-grid">
           {portfolios.map((portfolio) => {
+            const categoryLabel = portfolioCategories.find((item) => item.value === portfolio.category)?.label;
             const { data: publicImage } = supabase.storage
               .from('portfolio-images')
               .getPublicUrl(portfolio.image_path);
@@ -46,7 +47,7 @@ export async function PortfolioSection() {
                 </div>
                 <div className="portfolio-copy">
                   <div className="portfolio-meta">
-                    <span>{portfolio.location}</span>
+                    <span>{categoryLabel ? `${categoryLabel} · ${portfolio.location}` : portfolio.location}</span>
                     <time dateTime={portfolio.work_date}>{formatWorkDate(portfolio.work_date)}</time>
                   </div>
                   <h3>{portfolio.title}</h3>

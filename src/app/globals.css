@@ -70,8 +70,8 @@
 .admin-lead{margin:15px 0 30px;color:var(--muted);font-size:14px;line-height:1.8}
 .admin-form{display:grid;gap:10px}
 .admin-form label{margin-top:10px;font-size:13px;font-weight:800}
-.admin-form input,.admin-form textarea{width:100%;padding:14px 15px;border:1px solid #cad9d4;border-radius:12px;background:#fff;color:var(--ink);font:inherit;outline:none;transition:.2s}
-.admin-form input:focus,.admin-form textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(7,142,118,.1)}
+.admin-form input,.admin-form select,.admin-form textarea{width:100%;padding:14px 15px;border:1px solid #cad9d4;border-radius:12px;background:#fff;color:var(--ink);font:inherit;outline:none;transition:.2s}
+.admin-form input:focus,.admin-form select:focus,.admin-form textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(7,142,118,.1)}
 .admin-form input[type=file]{padding:10px}
 .admin-form small{color:var(--muted);font-size:11px}
 .admin-form button,.admin-actions a,.secondary-button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 18px;border:0;border-radius:12px;background:var(--ink);color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer}

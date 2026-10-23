@@ -4,6 +4,7 @@ import { FormEvent, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { portfolioCategories, type PortfolioCategory } from '@/types/portfolio';
 
 const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 const maxFileSize = 8 * 1024 * 1024;
@@ -21,13 +22,16 @@ export function PortfolioForm({ email }: { email: string }) {
     setIsError(false);
 
     const formData = new FormData(event.currentTarget);
+    const category = String(formData.get('category') ?? '') as PortfolioCategory;
     const title = String(formData.get('title') ?? '').trim();
     const description = String(formData.get('description') ?? '').trim();
     const workDate = String(formData.get('workDate') ?? '');
     const location = String(formData.get('location') ?? '').trim();
     const image = formData.get('image');
 
-    if (!title || !description || !workDate || !location || !(image instanceof File) || image.size === 0) {
+    const hasValidCategory = portfolioCategories.some((item) => item.value === category);
+
+    if (!hasValidCategory || !title || !description || !workDate || !location || !(image instanceof File) || image.size === 0) {
       setIsError(true);
       setMessage('모든 항목을 입력해 주세요.');
       return;
@@ -65,6 +69,7 @@ export function PortfolioForm({ email }: { email: string }) {
     }
 
     const { error: insertError } = await supabase.from('portfolios').insert({
+      category,
       title,
       description,
       work_date: workDate,
@@ -113,6 +118,14 @@ export function PortfolioForm({ email }: { email: string }) {
         <p className="admin-lead">등록이 완료되면 홈페이지 포트폴리오에 자동으로 공개됩니다.</p>
 
         <form ref={formRef} className="admin-form" onSubmit={handleSubmit}>
+          <label htmlFor="portfolio-category">분류</label>
+          <select id="portfolio-category" name="category" defaultValue="" required>
+            <option value="" disabled>사업 분야를 선택해 주세요</option>
+            {portfolioCategories.map((item) => (
+              <option key={item.value} value={item.value}>{item.label}</option>
+            ))}
+          </select>
+
           <label htmlFor="portfolio-title">제목</label>
           <input id="portfolio-title" name="title" maxLength={120} required placeholder="예: 지역 문화축제 공간 연출" />
 
