@@ -34,6 +34,8 @@ npm run dev
 
 관리자는 `/admin/login`에서 로그인한 뒤 대표 메뉴와 세부 메뉴, 사진, 제목, 설명, 작업 날짜와 장소를 등록할 수 있습니다. 등록 자료는 Supabase Database와 Storage에 저장되며 선택한 상세 페이지에서 세부 메뉴별 단락에 등록 순서대로 표시됩니다.
 
+등록된 작업은 관리자 화면의 수정 버튼으로 분류와 내용을 변경할 수 있습니다. 공개 페이지의 사진 설명판을 누르면 원본 사진이 확대됩니다.
+
 ## Vercel
 
 Framework Preset은 Next.js를 사용합니다. 기존 프로젝트 설정에 Output Directory(예: .)를 직접 지정했다면 해당 override를 해제합니다. 빌드는 npm run build를 사용합니다.

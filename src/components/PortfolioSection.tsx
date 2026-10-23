@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { PortfolioCard } from '@/components/PortfolioCard';
 import {
   portfolioCategories,
   portfolioSubcategories,
@@ -62,19 +63,16 @@ export async function PortfolioSection({ category }: { category: PortfolioCatego
                       .getPublicUrl(portfolio.image_path);
 
                     return (
-                      <article className="portfolio-card" key={portfolio.id}>
-                        <div className="portfolio-image">
-                          <img src={publicImage.publicUrl} alt={`${portfolio.title} 작업 사진`} />
-                        </div>
-                        <div className="portfolio-copy">
-                          <div className="portfolio-meta">
-                            <span>{categoryLabel ? `${categoryLabel} · ${portfolio.location}` : portfolio.location}</span>
-                            <time dateTime={portfolio.work_date}>{formatWorkDate(portfolio.work_date)}</time>
-                          </div>
-                          <h3>{portfolio.title}</h3>
-                          <p>{portfolio.description}</p>
-                        </div>
-                      </article>
+                      <PortfolioCard
+                        key={portfolio.id}
+                        imageUrl={publicImage.publicUrl}
+                        title={portfolio.title}
+                        description={portfolio.description}
+                        categoryLabel={categoryLabel ?? ''}
+                        location={portfolio.location}
+                        workDate={portfolio.work_date}
+                        formattedDate={formatWorkDate(portfolio.work_date)}
+                      />
                     );
                     })}
                   </div>

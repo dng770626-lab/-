@@ -11,9 +11,14 @@ export default async function AdminPage() {
 
   if (!user || user.app_metadata.role !== 'admin') redirect('/admin/login');
 
+  const { data: portfolios } = await supabase
+    .from('portfolios')
+    .select('id,category,subcategory,title,description,work_date,location,image_path,created_by,created_at')
+    .order('created_at', { ascending: true });
+
   return (
     <main className="admin-shell admin-dashboard">
-      <PortfolioForm email={user.email ?? '관리자'} />
+      <PortfolioForm email={user.email ?? '관리자'} portfolios={portfolios ?? []} />
     </main>
   );
 }
