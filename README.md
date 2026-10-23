@@ -32,7 +32,7 @@ npm run dev
 
 기존 /index.html 및 사업별 .html 주소는 Next.js rewrite로 계속 작동합니다. 신규 페이지는 src/app 아래에, 서버 API는 src/app/api 아래에 추가합니다. 서버 비밀값은 .env.local에 두고 커밋하지 않습니다.
 
-관리자는 `/admin/login`에서 로그인한 뒤 사진, 제목, 설명, 작업 날짜와 장소를 등록할 수 있습니다. 등록 자료는 Supabase Database와 Storage에 저장되고 공개 홈페이지와 문화행사 페이지에 자동으로 표시됩니다.
+관리자는 `/admin/login`에서 로그인한 뒤 사업 분야, 사진, 제목, 설명, 작업 날짜와 장소를 등록할 수 있습니다. 등록 자료는 Supabase Database와 Storage에 저장되고 선택한 사업 분야의 상세 페이지 아래쪽에 자동으로 표시됩니다.
 
 ## Vercel
 

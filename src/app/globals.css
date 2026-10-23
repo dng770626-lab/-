@@ -42,6 +42,7 @@
 
 /* 공개 포트폴리오 */
 .portfolio-section{border-top:1px solid var(--line)}
+.portfolio-section-detail{margin-top:72px;padding-top:72px}
 .portfolio-heading{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:end;margin-bottom:44px}
 .portfolio-heading>p{margin:0 0 8px;color:var(--muted);font-size:15px;line-height:1.9}
 .portfolio-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
@@ -90,7 +91,7 @@
 .admin-actions a{background:var(--green)}
 .secondary-button{border:1px solid var(--line);background:#fff;color:var(--ink)}
 
-@media(max-width:760px){.portfolio-heading{grid-template-columns:1fr;gap:18px}.portfolio-grid{grid-template-columns:1fr}.admin-shell{padding:30px 15px}.admin-card{padding:28px 20px}.admin-form-row{grid-template-columns:1fr}.admin-topbar{align-items:flex-start;flex-direction:column}.admin-topbar>div:first-child{align-items:flex-start;flex-direction:column;gap:6px}.admin-actions{width:100%}.admin-actions a,.admin-actions button{flex:1}footer .admin-login-link{order:3}footer small{order:4}}
+@media(max-width:760px){.portfolio-section-detail{margin-top:54px;padding-top:54px}.portfolio-heading{grid-template-columns:1fr;gap:18px}.portfolio-grid{grid-template-columns:1fr}.admin-shell{padding:30px 15px}.admin-card{padding:28px 20px}.admin-form-row{grid-template-columns:1fr}.admin-topbar{align-items:flex-start;flex-direction:column}.admin-topbar>div:first-child{align-items:flex-start;flex-direction:column;gap:6px}.admin-actions{width:100%}.admin-actions a,.admin-actions button{flex:1}footer .admin-login-link{order:3}footer small{order:4}}
 
 /* 버스와 나무 주변의 판촉물 구역 */
 .promotional{left:48%;top:47%;width:10%;height:19%}

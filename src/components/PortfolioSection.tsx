@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { portfolioCategories, type Portfolio } from '@/types/portfolio';
+import { portfolioCategories, type Portfolio, type PortfolioCategory } from '@/types/portfolio';
 
 function formatWorkDate(value: string) {
   return new Intl.DateTimeFormat('ko-KR', {
@@ -9,29 +9,32 @@ function formatWorkDate(value: string) {
   }).format(new Date(`${value}T00:00:00`));
 }
 
-export async function PortfolioSection() {
+export async function PortfolioSection({ category }: { category: PortfolioCategory }) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('portfolios')
     .select('id,category,title,description,work_date,location,image_path,created_by,created_at')
+    .eq('category', category)
     .order('created_at', { ascending: false });
 
   const portfolios = (data ?? []) as Portfolio[];
 
+  if (!error && portfolios.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="portfolio-section section" id="portfolio">
+    <section className="portfolio-section portfolio-section-detail" id="portfolio">
       <div className="portfolio-heading">
         <div>
-          <p className="kicker">나우지음의 작업 사례</p>
-          <h2>현장에서 완성한<br />공간과 이야기를 전합니다.</h2>
+          <p className="kicker">나우지음의 작업 사진</p>
+          <h2>현장에서 완성한<br />이야기를 만나보세요.</h2>
         </div>
         <p>사진과 설명으로 나우지음의 최근 작업을 확인해 보세요.</p>
       </div>
 
       {error ? (
         <p className="portfolio-empty">작업 사례를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.</p>
-      ) : portfolios.length === 0 ? (
-        <p className="portfolio-empty">첫 번째 작업 사례를 준비하고 있습니다.</p>
       ) : (
         <div className="portfolio-grid">
           {portfolios.map((portfolio) => {

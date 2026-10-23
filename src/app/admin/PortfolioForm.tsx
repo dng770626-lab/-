@@ -107,7 +107,7 @@ export function PortfolioForm({ email }: { email: string }) {
           <p>{email}</p>
         </div>
         <div className="admin-actions">
-          <Link href="/#portfolio">공개 페이지 보기</Link>
+          <Link href="/">공개 홈페이지 보기</Link>
           <button className="secondary-button" type="button" onClick={handleLogout}>로그아웃</button>
         </div>
       </header>
