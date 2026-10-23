@@ -4,7 +4,12 @@ import { FormEvent, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { portfolioCategories, type PortfolioCategory } from '@/types/portfolio';
+import {
+  isPortfolioSubcategory,
+  portfolioCategories,
+  portfolioSubcategories,
+  type PortfolioCategory,
+} from '@/types/portfolio';
 
 const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 const maxFileSize = 8 * 1024 * 1024;
@@ -15,6 +20,7 @@ export function PortfolioForm({ email }: { email: string }) {
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [category, setCategory] = useState<PortfolioCategory | ''>('');
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,16 +28,18 @@ export function PortfolioForm({ email }: { email: string }) {
     setIsError(false);
 
     const formData = new FormData(event.currentTarget);
-    const category = String(formData.get('category') ?? '') as PortfolioCategory;
+    const selectedCategory = String(formData.get('category') ?? '') as PortfolioCategory;
+    const subcategory = String(formData.get('subcategory') ?? '');
     const title = String(formData.get('title') ?? '').trim();
     const description = String(formData.get('description') ?? '').trim();
     const workDate = String(formData.get('workDate') ?? '');
     const location = String(formData.get('location') ?? '').trim();
     const image = formData.get('image');
 
-    const hasValidCategory = portfolioCategories.some((item) => item.value === category);
+    const hasValidCategory = portfolioCategories.some((item) => item.value === selectedCategory);
+    const hasValidSubcategory = hasValidCategory && isPortfolioSubcategory(selectedCategory, subcategory);
 
-    if (!hasValidCategory || !title || !description || !workDate || !location || !(image instanceof File) || image.size === 0) {
+    if (!hasValidCategory || !hasValidSubcategory || !title || !description || !workDate || !location || !(image instanceof File) || image.size === 0) {
       setIsError(true);
       setMessage('모든 항목을 입력해 주세요.');
       return;
@@ -69,7 +77,8 @@ export function PortfolioForm({ email }: { email: string }) {
     }
 
     const { error: insertError } = await supabase.from('portfolios').insert({
-      category,
+      category: selectedCategory,
+      subcategory,
       title,
       description,
       work_date: workDate,
@@ -87,6 +96,7 @@ export function PortfolioForm({ email }: { email: string }) {
     }
 
     formRef.current?.reset();
+    setCategory('');
     setMessage('작업 사례가 등록됐습니다. 공개 페이지에 바로 표시됩니다.');
     setIsSubmitting(false);
     router.refresh();
@@ -118,10 +128,24 @@ export function PortfolioForm({ email }: { email: string }) {
         <p className="admin-lead">등록이 완료되면 홈페이지 포트폴리오에 자동으로 공개됩니다.</p>
 
         <form ref={formRef} className="admin-form" onSubmit={handleSubmit}>
-          <label htmlFor="portfolio-category">분류</label>
-          <select id="portfolio-category" name="category" defaultValue="" required>
+          <label htmlFor="portfolio-category">대표 메뉴</label>
+          <select
+            id="portfolio-category"
+            name="category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value as PortfolioCategory | '')}
+            required
+          >
             <option value="" disabled>사업 분야를 선택해 주세요</option>
             {portfolioCategories.map((item) => (
+              <option key={item.value} value={item.value}>{item.label}</option>
+            ))}
+          </select>
+
+          <label htmlFor="portfolio-subcategory">세부 메뉴</label>
+          <select id="portfolio-subcategory" name="subcategory" defaultValue="" key={category} disabled={!category} required>
+            <option value="" disabled>{category ? '세부 메뉴를 선택해 주세요' : '대표 메뉴를 먼저 선택해 주세요'}</option>
+            {category && portfolioSubcategories[category].map((item) => (
               <option key={item.value} value={item.value}>{item.label}</option>
             ))}
           </select>
