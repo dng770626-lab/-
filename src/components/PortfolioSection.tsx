@@ -24,10 +24,6 @@ export async function PortfolioSection({ category }: { category: PortfolioCatego
 
   const portfolios = (data ?? []) as Portfolio[];
 
-  if (!error && portfolios.length === 0) {
-    return null;
-  }
-
   return (
     <section className="portfolio-section portfolio-section-detail" id="portfolio">
       <div className="portfolio-heading">
@@ -45,18 +41,21 @@ export async function PortfolioSection({ category }: { category: PortfolioCatego
           {portfolioSubcategories[category].map((subcategory, index) => {
             const items = portfolios.filter((portfolio) => portfolio.subcategory === subcategory.value);
 
-            if (items.length === 0) {
-              return null;
-            }
-
             return (
-              <section className="portfolio-subsection" key={subcategory.value}>
+              <section
+                className="portfolio-subsection"
+                id={`portfolio-${subcategory.value}`}
+                key={subcategory.value}
+              >
                 <div className="portfolio-subsection-heading">
                   <span>{String(index + 1).padStart(2, '0')}</span>
                   <h3>{subcategory.label}</h3>
                 </div>
-                <div className="portfolio-list">
-                  {items.map((portfolio) => {
+                {items.length === 0 ? (
+                  <p className="portfolio-subsection-empty">등록된 작업 사진을 준비하고 있습니다.</p>
+                ) : (
+                  <div className="portfolio-list">
+                    {items.map((portfolio) => {
                     const categoryLabel = portfolioCategories.find((item) => item.value === portfolio.category)?.label;
                     const { data: publicImage } = supabase.storage
                       .from('portfolio-images')
@@ -77,8 +76,9 @@ export async function PortfolioSection({ category }: { category: PortfolioCatego
                         </div>
                       </article>
                     );
-                  })}
-                </div>
+                    })}
+                  </div>
+                )}
               </section>
             );
           })}
